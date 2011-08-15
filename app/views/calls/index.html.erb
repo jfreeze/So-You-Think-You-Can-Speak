@@ -9,14 +9,14 @@
   <tr>
     <th>Vote</th>
     <th>Number</th>
-    <th>Date</th>
+    <th>Time</th>
   </tr>
 
 <% @calls.each do |call| %>
   <tr>
     <% t = call.created_at %>
     <% ft = "#{t.min}:#{t.sec}" %>
-    <td><%= call.vote %></td>
+    <td class="right"><%= call.vote %></td>
     <td><%= call.number[-4..-1] %></td>
     <td><%= ft %></td>
 <!--
