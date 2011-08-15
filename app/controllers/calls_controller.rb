@@ -95,9 +95,9 @@ class CallsController < ApplicationController
     when /bad/i then -1
     when /suck/i, /lousy/i
       -2
-    when /good/
+    when /good/i
       1
-    when /great/
+    when /great/i
       2
     else
       0
