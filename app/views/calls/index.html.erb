@@ -7,18 +7,18 @@
 <br />
 <table>
   <tr>
-    <th>Date</th>
-    <th>Number</th>
     <th>Vote</th>
+    <th>Number</th>
+    <th>Date</th>
   </tr>
 
 <% @calls.each do |call| %>
   <tr>
     <% t = call.created_at %>
     <% ft = "#{t.min}:#{t.sec}" %>
-    <td><%= ft %></td>
-    <td><%= call.number[-4..-1] %></td>
     <td><%= call.vote %></td>
+    <td><%= call.number[-4..-1] %></td>
+    <td><%= ft %></td>
 <!--
     <td><%= link_to 'Show', call %></td>
     <td><%= link_to 'Edit', edit_call_path(call) %></td>
