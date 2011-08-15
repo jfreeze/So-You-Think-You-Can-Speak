@@ -4,9 +4,9 @@ class CallsController < ApplicationController
   # GET /calls
   # GET /calls.xml
   def index
-    @refresh = %Q{<meta HTTP-EQUIV="REFRESH" content="5">}
-    @calls = Call.all
-    @vote  = Call.sum('vote')
+    @all_calls = Call.all
+    @calls     = Call.last_calls
+    @total     = Call.total
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }

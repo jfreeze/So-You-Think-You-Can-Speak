@@ -1,6 +1,6 @@
 <h1>Listing calls</h1>
 
-<span>Current Vote: </span><b><%= @vote %></b>
+<span>Current Vote: </span><b><%= @total %></b>
 <br />
 <%= link_to 'New Call', new_call_path %>
 <br />
@@ -15,7 +15,7 @@
 <% @calls.each do |call| %>
   <tr>
     <% t = call.created_at %>
-    <% ft = "#{t.min}:#{t.sec}" %>
+    <% ft = sprintf("%02d:%02d", t.min, t.sec) %>
     <td class="right"><%= call.vote %></td>
     <td><%= call.number[-4..-1] %></td>
     <td><%= ft %></td>
