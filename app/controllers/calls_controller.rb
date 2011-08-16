@@ -10,6 +10,7 @@ class CallsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }
+      format.json { render :json => @calls }
     end
   end
 
