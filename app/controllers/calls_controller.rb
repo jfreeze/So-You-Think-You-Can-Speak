@@ -95,12 +95,14 @@ class CallsController < ApplicationController
     when "0" then -1
     when "1" then 1
     when /bad/i then -1
-    when /suck/i, /lousy/i
+    when /sucks/i, /lousy/i
       -2
     when /good/i
       1
-    when /great/i
+    when /great/i, /fantastic/i
       2
+    when /awesome/i, /amazing/i
+      3
     else
       0
     end
