@@ -7,10 +7,18 @@ class CallsController < ApplicationController
     @all_calls = Call.all
     @calls     = Call.last_calls
     @total     = Call.total
+    puts @calls.to_json
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }
-      format.json { render :json => @calls }
+      # format.json { render :json => @calls.to_json }
+      format.json { render :json => %Q{["a": #{Time.now.to_i}]} }
+# [
+#   {"call":{"created_at":"2011-08-16T21:58:37Z","id":25,"number":"11111","updated_at":"2011-08-16T21:58:37Z","vote":1}},
+#   {"call":{"created_at":"2011-08-16T21:58:45Z","id":26,"number":"22222","updated_at":"2011-08-16T21:58:45Z","vote":1}},
+#   {"call":{"created_at":"2011-08-16T21:58:53Z","id":27,"number":"33333","updated_at":"2011-08-16T21:58:53Z","vote":-1}}
+# ]
+
     end
   end
 
@@ -106,6 +114,6 @@ class CallsController < ApplicationController
   end
   
   def refresh
-    @refresh = true
+    @refresh = false
   end
 end

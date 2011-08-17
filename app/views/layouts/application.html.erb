@@ -10,13 +10,78 @@
   </style>
   
   <title>SoYouThinkYouCanSpeak</title>
+  <%= javascript_include_tag 'smoothie.js' %>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js' %>  
+
   <%= csrf_meta_tag %>
 </head>
 <body>
 
 <%= yield %>
 
+<div class="result"></div>
 </body>
+<script type="text/javascript">
+
+      // Random data
+      
+      var j;
+      var line1 = new TimeSeries();
+      setInterval(function(data) {
+        var jqxhr = $.getJSON("/calls.json", function() {
+          alert("success");
+        })
+        .error(function(err) { 
+          console.log("ERROR: " + String(err));
+        })
+        .complete(function(data) {
+          console.log("COMPLETE");
+          console.log(data.items);
+          line1.append(new Date().getTime(), Math.random());
+        });
+        
+      }, 2000);
+      
+      // setInterval(function() {
+        // console.log(Date());
+        // console.log(new Date().getTime());
+        // console.log(Math.random());
+        // var jqxhr = $.get("localhost:3000/calls.json", function() {
+        //     alert("success");
+        //   })
+        //   .success(function() { alert("second success"); })
+        //   .error(function(e) { 
+        //     alert("error: "+e); 
+        //     $('.result').html(e); 
+        //   })
+        //   .complete(function() { alert("complete"); });
+
+        // $.get('/calls.json', function(data) {
+        //   $('.result').html(data);
+        //   console.log("===> " + data.a);
+        //   line1.append(data.a, Math.random());
+        //   line2.append(data.a, Math.random());
+        // });
+        // plotter(line1)
+        // line1.append(new Date().getTime(), Math.random());
+
+      // }, 2000);
+
+
+      var smoothie = new SmoothieChart({ grid: { 
+        strokeStyle: 'rgb(125, 0, 0)', 
+        fillStyle: 'rgb(60, 0, 0)', 
+        lineWidth: 1, 
+        millisPerLine: 1000, 
+        verticalSections: 5,
+        millisPerPixel : 10,
+        fps: 10
+      } });
+      smoothie.addTimeSeries(line1, { strokeStyle: 'rgb(0, 255, 0)', fillStyle: 'rgba(0, 255, 0, 0.4)', lineWidth: 3 });
+      // smoothie.addTimeSeries(line2, { strokeStyle: 'rgb(255, 0, 255)', fillStyle: 'rgba(255, 0, 255, 0.3)', lineWidth: 3 });
+
+      smoothie.streamTo(document.getElementById("mycanvas"), 1000);
+    </script>
 </html>
