@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <% if @refresh %>
-    <meta http-equiv="refresh" content="2"/>
-  <% end %>
-  
   <style type="text/css">
-    .right {text-align:right;}
+    #plotter {
+      border: 1px solid #ccc;
+    }
   </style>
   
-  <title>SoYouThinkYouCanSpeak</title>
-  <%= javascript_include_tag 'smoothie.js' %>
+  <title>So You Think You Can Speak</title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js' %>  
@@ -25,60 +22,45 @@
 </body>
 <script type="text/javascript">
 
-      // Random data
+  function plotter() {
+    var jqxhr = $.getJSON("/calls.json", function(data) {
+      x = values.length;
+      av = data.average_value;
+      // console.log(av);
+      if (av === 0) { 
+        av = 1;
+        context.strokeStyle = "rgb(150,150,150)";
+      } else if (av < 0)
+      {
+        context.strokeStyle = "rgb(255,50,50)";        
+      } else {
+        context.strokeStyle = "rgb(50,255,50)";        
+      }
+      $('b#value').html(data.value);
+      // console.log(av);
+      context.beginPath();
+      context.moveTo(x,100-av);
+      context.lineTo(x,100);
+      context.stroke();
+      context.closePath();
+      values.push(data.av);
       
-      var j;
-      var line1 = new TimeSeries();
-      setInterval(function(data) {
-        var jqxhr = $.getJSON("/calls.json", function() {
-          line1.append(new Date().getTime(), Math.random());
-          console.log(data.call.created_at);
-        })
-        .error(function(err) { 
-          console.log("ERROR: ");
-          console.log(err.status, err.statusText);
-        });
-      }, 3000);
-
+      if (values.length > 400) {
+        context.clearRect(0,0,context.canvas.width,context.canvas.height)
+        values = [];
+      }
+      // console.log(data);
+    });
+  }
+  var canvas  = document.getElementById('plotter');
+  if (canvas.getContext){
+    var context = canvas.getContext('2d');
+  } else {
+    $('#nocanvas').html('<h2>Browser does not support plotting.</h2>')
+  }
+  
+  var values = [];
+  setInterval(plotter, 1000);
       
-      // setInterval(function() {
-        // console.log(Date());
-        // console.log(new Date().getTime());
-        // console.log(Math.random());
-        // var jqxhr = $.get("localhost:3000/calls.json", function() {
-        //     alert("success");
-        //   })
-        //   .success(function() { alert("second success"); })
-        //   .error(function(e) { 
-        //     alert("error: "+e); 
-        //     $('.result').html(e); 
-        //   })
-        //   .complete(function() { alert("complete"); });
-
-        // $.get('/calls.json', function(data) {
-        //   $('.result').html(data);
-        //   console.log("===> " + data.a);
-        //   line1.append(data.a, Math.random());
-        //   line2.append(data.a, Math.random());
-        // });
-        // plotter(line1)
-        // line1.append(new Date().getTime(), Math.random());
-
-      // }, 2000);
-
-
-      var smoothie = new SmoothieChart({ grid: { 
-        strokeStyle: 'rgb(125, 0, 0)', 
-        fillStyle: 'rgb(60, 0, 0)', 
-        lineWidth: 1, 
-        millisPerLine: 1000, 
-        verticalSections: 5,
-        millisPerPixel : 10,
-        fps: 10
-      } });
-      smoothie.addTimeSeries(line1, { strokeStyle: 'rgb(0, 255, 0)', fillStyle: 'rgba(0, 255, 0, 0.4)', lineWidth: 3 });
-      // smoothie.addTimeSeries(line2, { strokeStyle: 'rgb(255, 0, 255)', fillStyle: 'rgba(255, 0, 255, 0.3)', lineWidth: 3 });
-
-      smoothie.streamTo(document.getElementById("mycanvas"), 1000);
-    </script>
+</script>
 </html>

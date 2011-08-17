@@ -1,5 +1,4 @@
 class CallsController < ApplicationController
-  before_filter :refresh, :only => :index
 
   # GET /calls
   # GET /calls.xml
@@ -7,18 +6,12 @@ class CallsController < ApplicationController
     @all_calls = Call.all
     @calls     = Call.last_calls
     @total     = Call.total
+    @data      = Call.data
     puts @calls.to_json
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }
-      format.json { render :json => @calls.to_json }
-      # format.json { render :json => %Q[{"a": #{Time.now.to_i}}] }
-# [
-#   {"call":{"created_at":"2011-08-16T21:58:37Z","id":25,"number":"11111","updated_at":"2011-08-16T21:58:37Z","vote":1}},
-#   {"call":{"created_at":"2011-08-16T21:58:45Z","id":26,"number":"22222","updated_at":"2011-08-16T21:58:45Z","vote":1}},
-#   {"call":{"created_at":"2011-08-16T21:58:53Z","id":27,"number":"33333","updated_at":"2011-08-16T21:58:53Z","vote":-1}}
-# ]
-
+      format.json { render :json => @data.to_json }
     end
   end
 
@@ -97,8 +90,8 @@ class CallsController < ApplicationController
   
   private
   
-  def parse_vote(s)
-    case s.strip
+  def parse_vote(vote)
+    case vote.strip
     when "0" then -1
     when "1" then 1
     when /bad/i then -1
@@ -113,7 +106,4 @@ class CallsController < ApplicationController
     end
   end
   
-  def refresh
-    @refresh = false
-  end
 end

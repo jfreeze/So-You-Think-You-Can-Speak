@@ -7,6 +7,19 @@ class Call < ActiveRecord::Base
   def self.total
     last_calls.sum('vote')
   end
-  
+
+  def self.data
+    lc = last_calls
+    value = lc.sum('vote')
+    count = lc.count
+    if count == 0
+      average_value = 0
+    else
+      average_value = (100.0*value/count).floor
+      average_value >  100 ?  100 : average_value
+      average_value < -100 ? -100 : average_value
+    end
+    { :value => value, :count => count, :average_value => average_value }
+  end
 
 end
