@@ -31,18 +31,15 @@
       var line1 = new TimeSeries();
       setInterval(function(data) {
         var jqxhr = $.getJSON("/calls.json", function() {
-          alert("success");
+          line1.append(new Date().getTime(), Math.random());
+          console.log(data.call.created_at);
         })
         .error(function(err) { 
-          console.log("ERROR: " + String(err));
-        })
-        .complete(function(data) {
-          console.log("COMPLETE");
-          console.log(data.items);
-          line1.append(new Date().getTime(), Math.random());
+          console.log("ERROR: ");
+          console.log(err.status, err.statusText);
         });
-        
-      }, 2000);
+      }, 3000);
+
       
       // setInterval(function() {
         // console.log(Date());

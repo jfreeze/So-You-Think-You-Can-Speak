@@ -11,8 +11,8 @@ class CallsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @calls }
-      # format.json { render :json => @calls.to_json }
-      format.json { render :json => %Q{["a": #{Time.now.to_i}]} }
+      format.json { render :json => @calls.to_json }
+      # format.json { render :json => %Q[{"a": #{Time.now.to_i}}] }
 # [
 #   {"call":{"created_at":"2011-08-16T21:58:37Z","id":25,"number":"11111","updated_at":"2011-08-16T21:58:37Z","vote":1}},
 #   {"call":{"created_at":"2011-08-16T21:58:45Z","id":26,"number":"22222","updated_at":"2011-08-16T21:58:45Z","vote":1}},
