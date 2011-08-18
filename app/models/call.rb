@@ -4,6 +4,11 @@ class Call < ActiveRecord::Base
     where(self.arel_table[:created_at].in(t-delay..t))
   end
   
+  def self.count2(delay=120)
+    t = Time.now
+    where(self.arel_table[:created_at].in(t-delay..t)).count
+  end
+  
   def self.total
     last_calls.sum('vote')
   end
@@ -11,7 +16,8 @@ class Call < ActiveRecord::Base
   def self.data
     lc = last_calls
     value = lc.sum('vote')
-    count = lc.count
+    # count = lc.count
+    count = count2
     if count == 0
       average_value = 0
     else
